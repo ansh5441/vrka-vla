@@ -4,7 +4,7 @@
 SHELL := /usr/bin/env bash
 .SHELLFLAGS := -eu -o pipefail -c
 
-.PHONY: all setup init-hooks fmt lint check-no-std check-python typecheck test verify-specs deny validate clean
+.PHONY: all setup init-hooks fmt lint check-no-std check-python typecheck test verify-specs tla-check deny validate clean
 
 all: validate
 
@@ -55,6 +55,10 @@ test:
 ## Translate PlusCal and execute headless TLC model checking on all specs/*.tla
 verify-specs:
 	./scripts/verify_specs.sh
+
+## Translate PlusCal and execute headless TLC model checking on vrka_horizon_lease
+tla-check:
+	./scripts/verify_specs.sh vrka_horizon_lease
 
 ## Run cargo-deny supply-chain and license checks
 deny:
