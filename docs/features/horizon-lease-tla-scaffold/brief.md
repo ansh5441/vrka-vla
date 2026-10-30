@@ -1,7 +1,7 @@
 # Brief: Phase 1 TLA+ / PlusCal Horizon Lease Scaffold & TLC Runner
 
 - **Slug**: `horizon-lease-tla-scaffold` · **Tier**: S · **Money**: false · **PII**: false · **Type**: feature
-- **Status**: Approved · **Created**: 2026-10-30
+- **Status**: Validated · **Created**: 2026-10-30
 - **ADRs**: [003-wait-free-seqlock-ipc](../../adr/003-wait-free-seqlock-ipc.md), [004-cbf-qp-safety-shield](../../adr/004-cbf-qp-safety-shield.md), [005-multi-agent-pack-leases](../../adr/005-multi-agent-pack-leases.md)
 - **Tier evidence**: ≤3 reversible tasks (~220 lines) for local TLA+/PlusCal tooling, empty specification skeleton, and cheat sheet; no money, PII, schema, auth, or external service boundary.
 
