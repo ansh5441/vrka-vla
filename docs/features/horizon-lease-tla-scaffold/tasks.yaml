@@ -1,0 +1,68 @@
+# Forge plan — frozen after approval except appended R-xx tasks and `followups`.
+slug: horizon-lease-tla-scaffold
+tier: S
+money: false
+pii: false
+status: Approved
+branch: feat/horizon-lease-tla-scaffold
+adrs: []
+flag: null
+
+commands:
+  typecheck: make typecheck
+  lint: make lint
+  test: make test
+  validate: make validate
+  report: ./scripts/test_verify_specs.sh
+report_file: target/junit.xml
+deferred_cmds:
+  - make tla-check
+  - ./scripts/test_verify_specs.sh
+
+scenarios:
+  S-01: {tests: ["scripts/test_verify_specs.sh::[S-01]"], tasks: [T-00, T-01]}
+  S-02: {tests: ["scripts/test_verify_specs.sh::[S-02]"], tasks: [T-00]}
+  S-03: {tests: ["scripts/test_verify_specs.sh::[S-03]"], tasks: [T-02]}
+
+slices:
+  - id: SL-1
+    name: Phase 1 TLA+ / PlusCal runner, skeleton, and cheat sheet
+    exit: "`make tla-check` and `./scripts/verify_specs.sh vrka_horizon_lease` translate PlusCal and pass TLC out-of-the-box, fail closed on violations/errors, and `specs/README.md` is complete"
+    tasks: [T-00, T-01, T-02]
+
+tasks:
+  - id: T-00
+    title: Download tla2tools.jar, update .gitignore, Makefile tla-check, and verify_specs.sh runner
+    deps: []
+    files: [.gitignore, Makefile, scripts/verify_specs.sh, scripts/test_verify_specs.sh]
+    read: [AGENTS.md]
+    serial: true
+    red: "new: scripts/test_verify_specs.sh [S-02]"
+    verify: ./scripts/test_verify_specs.sh
+    rules: [INV-01, INV-14, INV-21]
+    scenarios: [S-02]
+    effort: standard
+  - id: T-01
+    title: Scaffold vrka_horizon_lease.tla and vrka_horizon_lease.cfg skeleton (Law 1 compliant)
+    deps: [T-00]
+    files: [specs/horizon_lease/vrka_horizon_lease.tla, specs/horizon_lease/vrka_horizon_lease.cfg, scripts/test_verify_specs.sh]
+    read: [AGENTS.md, scripts/verify_specs.sh]
+    serial: true
+    red: "new: scripts/test_verify_specs.sh [S-01]"
+    verify: make tla-check
+    rules: [INV-01, INV-14, INV-21]
+    scenarios: [S-01]
+    effort: standard
+  - id: T-02
+    title: Author PlusCal quick-reference cheat sheet in specs/README.md
+    deps: [T-01]
+    files: [specs/README.md, scripts/test_verify_specs.sh]
+    read: [specs/horizon_lease/vrka_horizon_lease.tla, Makefile]
+    serial: true
+    red: "new: scripts/test_verify_specs.sh [S-03]"
+    verify: ./scripts/test_verify_specs.sh
+    rules: [INV-14, INV-21]
+    scenarios: [S-03]
+    effort: mechanical
+
+followups: []

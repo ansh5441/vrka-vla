@@ -1,0 +1,19 @@
+{
+  "slug": "horizon-lease-tla-scaffold",
+  "phase": "run",
+  "resume_phase": null,
+  "branch": "feat/horizon-lease-tla-scaffold",
+  "base_sha": "e81bef5bf86f3e041c5c03d2c1638201444e2e77",
+  "isolation": "subagent",
+  "contracts": { "sha": null, "locked": [] },
+  "baseline": { "command": null, "status": null, "known_failures": [] },
+  "tasks": {
+    "T-00": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-01": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-02": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null }
+  },
+  "escalations": [],
+  "waivers": [],
+  "pr": null,
+  "ci_rounds": 0
+}
