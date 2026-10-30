@@ -17,6 +17,16 @@ cleanup() {
 }
 trap cleanup EXIT
 
+echo "[test-verify-specs] [S-01] Testing PlusCal translation and headless TLC verification on vrka_horizon_lease..."
+if ! make -C "${REPO_ROOT}" tla-check >/dev/null 2>&1; then
+    echo "[test-verify-specs] FAIL [S-01]: make tla-check failed on vrka_horizon_lease" >&2
+    exit 1
+fi
+if ! "${RUNNER}" "vrka_horizon_lease" >/dev/null 2>&1; then
+    echo "[test-verify-specs] FAIL [S-01]: verify_specs.sh vrka_horizon_lease failed" >&2
+    exit 1
+fi
+
 echo "[test-verify-specs] [S-02] Case (a): Testing unknown <spec_name> fails closed..."
 if TLA_SPECS_DIR="${TMP_DIR}" "${RUNNER}" "nonexistent_spec_xyz" >/dev/null 2>&1; then
     echo "[test-verify-specs] FAIL [S-02]: Runner exited 0 for unknown spec 'nonexistent_spec_xyz'" >&2
@@ -73,10 +83,11 @@ mkdir -p "$(dirname "${JUNIT_FILE}")"
 cat > "${JUNIT_FILE}" << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="verify_specs" tests="1" failures="0" errors="0">
+  <testsuite name="verify_specs" tests="2" failures="0" errors="0">
+    <testcase name="[S-01] PlusCal translation and headless TLC verification succeed on the horizon lease skeleton" classname="scripts.test_verify_specs"/>
     <testcase name="[S-02] CLI runner fails closed on invariant violation, deadlock, parse error, or unknown spec" classname="scripts.test_verify_specs"/>
   </testsuite>
 </testsuites>
 EOF
 
-echo "[test-verify-specs] PASS [S-02]: All negative fail-closed checks passed."
+echo "[test-verify-specs] PASS [S-01] [S-02]: All checks passed."
