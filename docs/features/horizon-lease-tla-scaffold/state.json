@@ -6,11 +6,11 @@
   "base_sha": "e81bef5bf86f3e041c5c03d2c1638201444e2e77",
   "isolation": "subagent",
   "contracts": { "sha": null, "locked": [] },
-  "baseline": { "command": null, "status": null, "known_failures": [] },
+  "baseline": { "command": "make validate", "status": "pass", "known_failures": [] },
   "tasks": {
-    "T-00": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
-    "T-01": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
-    "T-02": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null }
+    "T-00": { "status": "done", "attempts": 0, "base": "7a746abdbb02c91ac9fba02b6dea5a25b7abb226", "commit": "6b6e2b6096bb08407802b6e0972c65d2c4f894f8", "extra_files": [], "red": "FAIL [S-02]: Runner exited 0 for unknown spec 'nonexistent_spec_xyz'", "note": "Downloaded tla2tools.jar, added tla-check target, and enforced fail-closed PlusCal/TLC verification in verify_specs.sh." },
+    "T-01": { "status": "done", "attempts": 0, "base": "6b6e2b6096bb08407802b6e0972c65d2c4f894f8", "commit": "e42cf79b864be8e68cff2ea134224a2c11635e24", "extra_files": [], "red": "[tla-verify] ERROR: Unknown or missing TLA+ specification 'vrka_horizon_lease' under /Users/anshuman/code/vrka-vla/specs", "note": "Scaffolded Law-1 compliant vrka_horizon_lease.tla/.cfg skeleton with PlusCal stubs and [S-01] verification test." },
+    "T-02": { "status": "done", "attempts": 0, "base": "e42cf79b864be8e68cff2ea134224a2c11635e24", "commit": "82616172090292a631befe0b1bd076d48fd76d03", "extra_files": [], "red": "[test-verify-specs] FAIL [S-03]: specs/README.md does not exist", "note": "Authored 1-page PlusCal/TLA+ cheat sheet in specs/README.md and added [S-03] checks to scripts/test_verify_specs.sh." }
   },
   "escalations": [],
   "waivers": [],

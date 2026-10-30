@@ -3,7 +3,7 @@ slug: horizon-lease-tla-scaffold
 tier: S
 money: false
 pii: false
-status: Approved
+status: Running
 branch: feat/horizon-lease-tla-scaffold
 adrs: []
 flag: null
