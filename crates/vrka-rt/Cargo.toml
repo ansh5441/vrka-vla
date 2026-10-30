@@ -1,0 +1,24 @@
+[package]
+name = "vrka-rt"
+description = "500 Hz deterministic real-time execution daemon for vrka-vla."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+readme.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[[bin]]
+name = "vrka-rt"
+path = "src/main.rs"
+
+[dependencies]
+vrka-abi = { workspace = true }
+vrka-shm = { workspace = true, features = ["std"] }
+vrka-cbf = { workspace = true }
+
+[lints]
+workspace = true

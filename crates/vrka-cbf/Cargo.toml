@@ -1,0 +1,22 @@
+[package]
+name = "vrka-cbf"
+description = "Control Barrier Function (CBF) safety shield (#![no_std] core with C-FFI solver bindings)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+readme.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+build = "build.rs"
+
+[features]
+default = []
+
+[dependencies]
+vrka-abi = { workspace = true }
+
+[lints]
+workspace = true

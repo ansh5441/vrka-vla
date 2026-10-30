@@ -1,0 +1,8 @@
+[toolchain]
+# Stable toolchain for deterministic builds and static checks.
+# Note: Miri execution (`cargo +nightly miri test`) requires a nightly toolchain
+# with the `miri` and `rust-src` components installed:
+#   rustup toolchain install nightly --component miri,rust-src
+channel = "1.93.1"
+components = ["rustfmt", "clippy", "rust-src"]
+profile = "minimal"

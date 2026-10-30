@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Strict pre-commit gate for `vrka-vla` (The Vedic Wolf Pack).
+# Enforces formatting, zero undocumented unsafe blocks, zero unwrap/expect/panic
+# in library crates, #![no_std] default-feature purity, and Python static checks.
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "${REPO_ROOT}"
+
+echo "[pre-commit] 1/4 Checking Rust formatting (cargo fmt --all -- --check)..."
+cargo fmt --all -- --check
+
+echo "[pre-commit] 2/4 Running strict Clippy static analysis (cargo clippy --workspace --all-targets -- -D warnings)..."
+cargo clippy --workspace --all-targets -- -D warnings
+
+echo "[pre-commit] 3/4 Verifying #![no_std] default-feature hygiene (vrka-abi, vrka-shm, vrka-cbf)..."
+./scripts/check_no_std.sh
+
+STAGED_PROPOSER_FILES="$(git diff --cached --name-only --diff-filter=ACMR -- 'proposer/' || true)"
+if [[ -n "${STAGED_PROPOSER_FILES}" ]]; then
+    echo "[pre-commit] 4/4 Staged files detected under proposer/; checking Python lint & type hygiene..."
+    (
+        cd "${REPO_ROOT}/proposer"
+        if command -v uv >/dev/null 2>&1; then
+            uv run ruff check .
+            uv run ruff format --check .
+            uv run mypy --strict src tests
+        elif command -v ruff >/dev/null 2>&1 && command -v mypy >/dev/null 2>&1; then
+            ruff check .
+            ruff format --check .
+            mypy --strict src tests
+        else
+            echo "[pre-commit] WARN: 'uv' (or 'ruff'/'mypy') not found on PATH; validating Python syntax via python3 -m py_compile..."
+            python3 -m py_compile src/vrka_proposer/__init__.py tests/test_stub.py
+        fi
+    )
+else
+    echo "[pre-commit] 4/4 No staged files under proposer/; skipping Python lint gate."
+fi
+
+echo "[pre-commit] PASS: All pre-commit checks succeeded."

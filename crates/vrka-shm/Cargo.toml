@@ -1,0 +1,23 @@
+[package]
+name = "vrka-shm"
+description = "Wait-free shared memory IPC core (#![no_std] by default, `std` feature for POSIX mmap setup)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+readme.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[features]
+default = []
+# Enable POSIX `mmap` / file-descriptor backing initialization outside the `#![no_std]` hot path.
+std = []
+
+[dependencies]
+vrka-abi = { workspace = true }
+
+[lints]
+workspace = true

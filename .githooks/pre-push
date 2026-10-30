@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Strict pre-push gate for `vrka-vla` (The Vedic Wolf Pack).
+# Enforces full workspace unit/integration tests (including zero-allocation checks)
+# and headless TLA+ / PlusCal model verification across `specs/`.
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "${REPO_ROOT}"
+
+echo "[pre-push] 1/2 Running Cargo workspace test suite (cargo test --workspace)..."
+cargo test --workspace
+
+echo "[pre-push] 2/2 Running headless TLA+ / PlusCal specification verifier (scripts/verify_specs.sh)..."
+./scripts/verify_specs.sh
+
+echo "[pre-push] PASS: All pre-push checks succeeded."

@@ -1,0 +1,18 @@
+[package]
+name = "vrka-ebpf"
+description = "Stub crate for aya-rs kernel scheduling and real-time jitter probes."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+readme.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[features]
+default = []
+
+[lints]
+workspace = true

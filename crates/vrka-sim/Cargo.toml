@@ -1,0 +1,28 @@
+[package]
+name = "vrka-sim"
+description = "Deterministic libmujoco chaos simulator harness for vrka-vla."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+readme.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lib]
+name = "vrka_sim"
+path = "src/lib.rs"
+
+[[bin]]
+name = "vrka-sim"
+path = "src/main.rs"
+
+[dependencies]
+vrka-abi = { workspace = true }
+vrka-shm = { workspace = true, features = ["std"] }
+vrka-cbf = { workspace = true }
+
+[lints]
+workspace = true

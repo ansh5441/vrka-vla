@@ -1,0 +1,24 @@
+# Rust / Cargo build artifacts (Cargo.lock is intentionally tracked for deterministic builds)
+/target/
+**/*.rs.bk
+
+# Python / uv artifacts (uv.lock is intentionally tracked when generated)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# TLA+ model checker scratch states and downloaded jar
+specs/**/.tlc_meta_*/
+specs/**/*.old
+specs/tools/tla2tools.jar
+
+# OS / Editor files
+.DS_Store
+*.swp
