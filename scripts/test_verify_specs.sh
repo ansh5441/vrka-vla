@@ -79,15 +79,35 @@ if TLA_SPECS_DIR="${TMP_DIR}" "${RUNNER}" "bad_inv" >/dev/null 2>&1; then
     exit 1
 fi
 
+echo "[test-verify-specs] [S-03] Testing PlusCal quick-reference cheat sheet and gitignore hygiene..."
+README_FILE="${REPO_ROOT}/specs/README.md"
+if [[ ! -f "${README_FILE}" ]]; then
+    echo "[test-verify-specs] FAIL [S-03]: specs/README.md does not exist" >&2
+    exit 1
+fi
+
+for token in ":=" "with" "await" "=>" "make tla-check" "./scripts/verify_specs.sh"; do
+    if ! grep -Fq "${token}" "${README_FILE}"; then
+        echo "[test-verify-specs] FAIL [S-03]: specs/README.md is missing required reference '${token}'" >&2
+        exit 1
+    fi
+done
+
+if ! git -C "${REPO_ROOT}" check-ignore -q specs/tools/tla2tools.jar; then
+    echo "[test-verify-specs] FAIL [S-03]: specs/tools/tla2tools.jar is not ignored by git" >&2
+    exit 1
+fi
+
 mkdir -p "$(dirname "${JUNIT_FILE}")"
 cat > "${JUNIT_FILE}" << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="verify_specs" tests="2" failures="0" errors="0">
+  <testsuite name="verify_specs" tests="3" failures="0" errors="0">
     <testcase name="[S-01] PlusCal translation and headless TLC verification succeed on the horizon lease skeleton" classname="scripts.test_verify_specs"/>
     <testcase name="[S-02] CLI runner fails closed on invariant violation, deadlock, parse error, or unknown spec" classname="scripts.test_verify_specs"/>
+    <testcase name="[S-03] PlusCal quick-reference cheat sheet and gitignore hygiene are in place" classname="scripts.test_verify_specs"/>
   </testsuite>
 </testsuites>
 EOF
 
-echo "[test-verify-specs] PASS [S-01] [S-02]: All checks passed."
+echo "[test-verify-specs] PASS [S-01] [S-02] [S-03]: All checks passed."
