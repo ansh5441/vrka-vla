@@ -1,6 +1,6 @@
 # ADR 002: Spatial Security Tokens & Capability-Bounded Envelopes
 
-- **Status**: Accepted · **Date**: 2026-10-30
+- **Status**: Validated · **Date**: 2026-10-30
 - **Feature**: [`remaining-phases-roadmap`](../features/remaining-phases-roadmap/brief.md) · **Supersedes**: none · **Superseded by**: none
 
 ## Context

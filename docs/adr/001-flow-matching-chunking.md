@@ -1,6 +1,6 @@
 # ADR 001: Flow-Matching Trajectory Chunking (25 Hz Producer to 500 Hz Spine)
 
-- **Status**: Accepted · **Date**: 2026-10-30
+- **Status**: Validated · **Date**: 2026-10-30
 - **Feature**: [`horizon-lease-tla-scaffold`](../features/horizon-lease-tla-scaffold/brief.md), [`remaining-phases-roadmap`](../features/remaining-phases-roadmap/brief.md) · **Supersedes**: none · **Superseded by**: none
 
 ## Context

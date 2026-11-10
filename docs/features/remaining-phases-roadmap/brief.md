@@ -1,7 +1,7 @@
 # Brief: Remaining Phases Roadmap (Phases 2–5: ABI/Seqlock IPC, 500 Hz CBF Spine, Swarm Leases, VLA Proposer & Sim)
 
 - **Slug**: `remaining-phases-roadmap` · **Tier**: L · **Law1**: true · **HotPath**: true · **ABI**: true · **Type**: feature
-- **Status**: Approved · **Created**: 2026-11-09
+- **Status**: Validated · **Created**: 2026-11-09
 - **ADRs**: [001-flow-matching-chunking](../../adr/001-flow-matching-chunking.md), [002-spatial-security-tokens](../../adr/002-spatial-security-tokens.md), [003-wait-free-seqlock-ipc](../../adr/003-wait-free-seqlock-ipc.md), [004-cbf-qp-safety-shield](../../adr/004-cbf-qp-safety-shield.md), [005-multi-agent-pack-leases](../../adr/005-multi-agent-pack-leases.md)
 - **Tier evidence**: Spans Law 1 (`Ordering::*` in `vrka-shm`, CBF barrier math in `vrka-cbf`, multi-agent TLA+ in `specs/pack_swarm/`), 500 Hz `#![no_std]` hot path (`vrka-abi`, `vrka-shm`, `vrka-cbf`, `vrka-rt`, `vrka-swarm`, `vrka-ebpf`), and 64-byte cache-line / C-FFI ABI boundaries (`#[repr(C, align(64))]`, `io_uring`, `libmujoco`).
 
