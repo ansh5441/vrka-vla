@@ -1,0 +1,35 @@
+{
+  "slug": "remaining-phases-roadmap",
+  "phase": "run",
+  "resume_phase": null,
+  "branch": "feat/remaining-phases-roadmap",
+  "base_sha": "cfbf04539effe4d31ffacde3b88d16c42f01d0b4",
+  "law1": true,
+  "law1_human_spec": "Phase 1 discrete barrier h(x) = EffectiveObstaclePos - (robot_pos + v(v+1)/2) >= 0 and Seqlock state machine verified in vrka_horizon_lease.tla. Phase 2 Rust Ordering::* memory ordering in vrka-shm: SeqlockWriter WriteBegin fetch_add(1, Ordering::Release), payload stores, WriteCommit fetch_add(1, Ordering::Release); SeqlockReader seq_before load(Ordering::Acquire), payload reads, seq_after load(Ordering::Acquire). Phase 3 continuous CBF-QP equations and Phase 4 multi-agent pack_swarm TLA+ require explicit human spec upon phase entry.",
+  "hotpath": true,
+  "abi": true,
+  "isolation": "subagent",
+  "contracts": {
+    "sha": "4fdf2a87647960f16af3d4e1c877d2a7c32a6c22",
+    "locked": [
+      "crates/vrka-shm/tests/contract_abi_seqlock.rs",
+      "crates/vrka-cbf/tests/contract_cbf_shield.rs",
+      "crates/vrka-rt/tests/contract_rt_spine.rs",
+      "crates/vrka-swarm/tests/contract_swarm_leases.rs",
+      "proposer/tests/test_contract_proposer.py"
+    ]
+  },
+  "baseline": { "command": "make validate", "status": "pass", "known_failures": [] },
+  "tasks": {
+    "T-01": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-02": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-03": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-04": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-05": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-06": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null }
+  },
+  "escalations": [],
+  "waivers": [],
+  "pr": null,
+  "ci_rounds": 0
+}
