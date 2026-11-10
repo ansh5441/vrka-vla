@@ -59,7 +59,6 @@ unsafe impl GlobalAlloc for CountingAllocator {
 static ALLOCATOR: CountingAllocator = CountingAllocator::new();
 
 #[test]
-#[ignore = "vrka-contract"]
 fn test_s01_shm_slot_alignment_and_zero_alloc() {
     assert_eq!(core::mem::align_of::<ShmSlotHeader>(), CACHE_LINE_BYTES);
     assert_eq!(core::mem::size_of::<ShmSlotHeader>(), 64);
