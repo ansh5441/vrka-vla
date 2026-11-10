@@ -1,0 +1,55 @@
+# Vrka 40-series plan — frozen after approval except appended R-xx tasks and `followups`.
+slug: <slug>
+tier: M                      # S | M | L  (40§1)
+law1: false                  # true when touching Ordering::*, specs/*.tla, or vrka-cbf barrier math (forces Tier L)
+hotpath: true                # true when touching 500 Hz loop or #![no_std] crates (forces >= Tier M)
+abi: true                    # true when touching #[repr(C)] / SHM / wire / C-FFI boundaries (forces >= Tier M)
+status: Draft                # Draft | Approved | Running | Done
+branch: feat/<slug>
+adrs: [ADR-<YYYYMMDD>-<decision-slug>]
+flag: null                   # Cargo feature or runtime config flag, or null
+
+commands:                    # must ALREADY exist (baseline runs before any task); proven by `vrka-check.sh cmds`
+  typecheck: make typecheck
+  lint: make lint
+  test: make test
+  validate: make validate
+  report: cargo test --workspace -- --nocapture > target/vrka-test-report.log 2>&1
+report_file: target/vrka-test-report.log
+deferred_cmds: []            # task verify / report commands created by T-00; re-proven by 44 right after T-00
+
+scenarios:                   # traceability: scenario -> tests -> tasks (no orphans either way)
+  S-01: {tests: ["crates/vrka-abi/tests/<slug>_contract.rs::test_S01_nominal_align_and_zero_alloc"], tasks: [T-02]}
+  S-02: {tests: ["crates/vrka-abi/tests/<slug>_contract.rs::test_S02_reject_unaligned_or_stale_ttl"], tasks: [T-03]}
+
+slices:
+  - id: SL-1
+    name: Zero-alloc ABI & fail-safe spine slice
+    exit: "<verifiable capability including fail-safe rejection and 0 heap allocations>"
+    tasks: [T-01, T-02, T-03]
+
+tasks:
+  - id: T-01
+    title: Cache-line ABI descriptor and compile-time size assertions
+    deps: []
+    files: [crates/vrka-abi/src/lib.rs]   # EVERY path written, incl. red-test file
+    read: [docs/adr/ADR-<YYYYMMDD>-<decision-slug>.md]
+    serial: false            # true when touching shared Cargo.toml, Cargo.lock, or lib.rs exports across tasks
+    red: n/a                 # n/a | "unskip [S-0x]" | "new: crates/<crate>/tests/<file>.rs [S-0x]"
+    verify: make typecheck
+    rules: [RT-02, RT-03, RT-09]
+    scenarios: []
+    effort: mechanical       # mechanical | standard | complex (law1 tasks must be complex)
+  - id: T-02
+    title: Deterministic hot-path implementation and zero-allocation proof
+    deps: [T-01]
+    files: [crates/vrka-abi/src/lib.rs, crates/vrka-abi/tests/<slug>_contract.rs]
+    read: [crates/vrka-abi/src/lib.rs, crates/vrka-abi/tests/zero_alloc_hot_path.rs]
+    serial: false
+    red: "unskip [S-01]"
+    verify: cargo test --package vrka-abi
+    rules: [RT-02, RT-03, RT-05, RT-10]
+    scenarios: [S-01]
+    effort: standard
+
+followups: []                # e.g. remove feature flag, deferred P2 findings (appended by 45)

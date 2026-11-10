@@ -1,0 +1,83 @@
+{
+  "slug": "remaining-phases-roadmap",
+  "phase": "ship",
+  "resume_phase": null,
+  "branch": "feat/remaining-phases-roadmap",
+  "base_sha": "cfbf04539effe4d31ffacde3b88d16c42f01d0b4",
+  "law1": true,
+  "law1_human_spec": "Phase 1 discrete barrier h(x) = EffectiveObstaclePos - (robot_pos + v(v+1)/2) >= 0 and Seqlock state machine verified in vrka_horizon_lease.tla. Phase 2 Rust Ordering::* memory ordering in vrka-shm: SeqlockWriter WriteBegin fetch_add(1, Ordering::Release), payload stores, WriteCommit fetch_add(1, Ordering::Release); SeqlockReader seq_before load(Ordering::Acquire), payload reads, seq_after load(Ordering::Acquire). Phase 3 continuous CBF-QP equations and Phase 4 multi-agent pack_swarm TLA+ require explicit human spec upon phase entry.",
+  "hotpath": true,
+  "abi": true,
+  "isolation": "subagent",
+  "contracts": {
+    "sha": "4fdf2a87647960f16af3d4e1c877d2a7c32a6c22",
+    "locked": [
+      "crates/vrka-shm/tests/contract_abi_seqlock.rs",
+      "crates/vrka-cbf/tests/contract_cbf_shield.rs",
+      "crates/vrka-rt/tests/contract_rt_spine.rs",
+      "crates/vrka-swarm/tests/contract_swarm_leases.rs",
+      "proposer/tests/test_contract_proposer.py"
+    ]
+  },
+  "baseline": { "command": "make validate", "status": "pass", "known_failures": [] },
+  "tasks": {
+    "T-01": {
+      "status": "done",
+      "attempts": 0,
+      "base": "1d07e09",
+      "commit": "391aaef",
+      "extra_files": [],
+      "red": "unskip [S-01]",
+      "note": "Implemented wait-free Seqlock writer and reader with Law 1 Acquire/Release ordering and zero allocations."
+    },
+    "T-02": {
+      "status": "done",
+      "attempts": 0,
+      "base": "391aaef",
+      "commit": "b4a9fd1",
+      "extra_files": [],
+      "red": "unskip [S-02]",
+      "note": "Implemented Seqlock boundary rejection for unaligned buffer, odd sequence, and NaN/Inf velocities."
+    },
+    "T-03": {
+      "status": "done",
+      "attempts": 0,
+      "base": "0c1689c",
+      "commit": "e15ed9c",
+      "extra_files": [],
+      "red": "unskip [S-03]",
+      "note": "Implemented discrete CBF braking-distance barrier filter and zero-alloc forward-invariant safe velocity projection."
+    },
+    "T-04": {
+      "status": "done",
+      "attempts": 0,
+      "base": "e15ed9c",
+      "commit": "55ef57a",
+      "extra_files": [],
+      "red": "unskip [S-04]",
+      "note": "Implemented 500 Hz spine horizon TTL decay ladder (Nominal -> DecelFallback -> StanceLock) and binary flight recorder entry formatting."
+    },
+    "T-05": {
+      "status": "done",
+      "attempts": 0,
+      "base": "980ee6c",
+      "commit": "b02cc23",
+      "extra_files": [],
+      "red": "unskip [S-05]",
+      "note": "Implemented multi-agent peer lease obstacle aggregation and TTL decay in vrka-swarm."
+    },
+    "T-06": {
+      "status": "done",
+      "attempts": 0,
+      "base": "b02cc23",
+      "commit": "8ce203f",
+      "extra_files": [],
+      "red": "unskip [S-01]",
+      "note": "Implemented action chunk validation and nominal frequency testing in vrka_proposer."
+    }
+  },
+  "escalations": [],
+  "waivers": [],
+  "pr": 1,
+  "ci_rounds": 0
+}

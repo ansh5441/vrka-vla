@@ -11,6 +11,10 @@ repository.workspace = true
 keywords.workspace = true
 categories.workspace = true
 
+[lib]
+name = "vrka_rt"
+path = "src/lib.rs"
+
 [[bin]]
 name = "vrka-rt"
 path = "src/main.rs"

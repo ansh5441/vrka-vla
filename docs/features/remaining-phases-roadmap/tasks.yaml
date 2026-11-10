@@ -1,0 +1,131 @@
+# Vrka 40-series plan — frozen after approval except appended R-xx tasks and `followups`.
+slug: remaining-phases-roadmap
+tier: L
+law1: true
+hotpath: true
+abi: true
+status: Done
+branch: feat/remaining-phases-roadmap
+adrs:
+  - 001-flow-matching-chunking
+  - 002-spatial-security-tokens
+  - 003-wait-free-seqlock-ipc
+  - 004-cbf-qp-safety-shield
+  - 005-multi-agent-pack-leases
+flag: null
+
+commands:
+  typecheck: make typecheck
+  lint: make lint
+  test: make test
+  validate: make validate
+  report: cargo test --workspace -- --nocapture > target/vrka-test-report.log 2>&1
+report_file: target/vrka-test-report.log
+deferred_cmds: []
+
+scenarios:
+  S-01:
+    tests:
+      - "crates/vrka-shm/tests/contract_abi_seqlock.rs::test_s01_shm_slot_alignment_and_zero_alloc"
+      - "proposer/tests/test_contract_proposer.py::test_s01_proposer_chunk_contract"
+    tasks: [T-01, T-06]
+  S-02:
+    tests:
+      - "crates/vrka-shm/tests/contract_abi_seqlock.rs::test_s02_seqlock_boundary_rejection"
+    tasks: [T-02]
+  S-03:
+    tests:
+      - "crates/vrka-cbf/tests/contract_cbf_shield.rs::test_s03_cbf_braking_distance_shield"
+    tasks: [T-03]
+  S-04:
+    tests:
+      - "crates/vrka-rt/tests/contract_rt_spine.rs::test_s04_spine_horizon_ttl_decay"
+    tasks: [T-04]
+  S-05:
+    tests:
+      - "crates/vrka-swarm/tests/contract_swarm_leases.rs::test_s05_swarm_peer_lease_tightening"
+    tasks: [T-05]
+
+slices:
+  - id: SL-1
+    name: Phase 2 Wait-Free Seqlock IPC & Cache-Line Alignment
+    exit: "Seqlock round-trip succeeds with 0 heap allocations under CountingAllocator, and odd sequence numbers, NaN/Inf, and unaligned capacities are rejected in O(1)"
+    tasks: [T-01, T-02]
+  - id: SL-2
+    name: Phase 3 Discrete CBF Shield & 500 Hz Spine Decay Ladder
+    exit: "CBF braking-distance barrier clamps candidate velocities to preserve forward invariance with 0 heap allocations, and 500 Hz spine transitions Nominal -> DecelFallback -> StanceLock on lease expiry"
+    tasks: [T-03, T-04]
+  - id: SL-3
+    name: Phase 4 & 5 Pack Leases & VLA Proposer Contract
+    exit: "PeerLeaseAggregator dynamically tightens EffectiveObstaclePos on valid peer reservation and reverts on expiry, and 25 Hz proposer validates action chunk schema"
+    tasks: [T-05, T-06]
+
+tasks:
+  - id: T-01
+    title: Implement wait-free Seqlock writer and reader with Law 1 memory ordering in vrka-shm
+    deps: []
+    files: [crates/vrka-shm/src/lib.rs, crates/vrka-shm/tests/contract_abi_seqlock.rs]
+    read: [docs/adr/003-wait-free-seqlock-ipc.md, crates/vrka-abi/src/types.rs]
+    serial: true
+    red: "unskip [S-01]"
+    verify: cargo test --package vrka-shm --test contract_abi_seqlock -- test_s01
+    rules: [RT-01, RT-02, RT-03, RT-05, RT-06, RT-09, RT-10]
+    scenarios: [S-01]
+    effort: complex
+  - id: T-02
+    title: Implement Seqlock boundary rejection for torn writes, unaligned capacity, and NaN/Inf
+    deps: [T-01]
+    files: [crates/vrka-shm/src/lib.rs, crates/vrka-shm/tests/contract_abi_seqlock.rs]
+    read: [docs/adr/003-wait-free-seqlock-ipc.md]
+    serial: true
+    red: "unskip [S-02]"
+    verify: cargo test --package vrka-shm --test contract_abi_seqlock -- test_s02
+    rules: [RT-02, RT-06, RT-08, RT-09]
+    scenarios: [S-02]
+    effort: standard
+  - id: T-03
+    title: Implement discrete CBF braking-distance shield and forward-invariant projection in vrka-cbf
+    deps: []
+    files: [crates/vrka-cbf/src/lib.rs, crates/vrka-cbf/tests/contract_cbf_shield.rs]
+    read: [docs/adr/004-cbf-qp-safety-shield.md, specs/horizon_lease/vrka_horizon_lease.tla]
+    serial: true
+    red: "unskip [S-03]"
+    verify: cargo test --package vrka-cbf --test contract_cbf_shield -- test_s03
+    rules: [RT-01, RT-02, RT-04, RT-05, RT-08, RT-09, RT-10]
+    scenarios: [S-03]
+    effort: standard
+  - id: T-04
+    title: Implement 500 Hz spine horizon TTL decay ladder and flight recorder in vrka-rt
+    deps: [T-01, T-03]
+    files: [crates/vrka-rt/src/lib.rs, crates/vrka-rt/tests/contract_rt_spine.rs]
+    read: [docs/adr/004-cbf-qp-safety-shield.md, crates/vrka-abi/src/types.rs]
+    serial: true
+    red: "unskip [S-04]"
+    verify: cargo test --package vrka-rt --test contract_rt_spine -- test_s04
+    rules: [RT-04, RT-05, RT-07, RT-08, RT-10, RT-12, RT-19]
+    scenarios: [S-04]
+    effort: standard
+  - id: T-05
+    title: Implement multi-agent peer lease obstacle aggregation and TTL decay in vrka-swarm
+    deps: []
+    files: [crates/vrka-swarm/src/lib.rs, crates/vrka-swarm/tests/contract_swarm_leases.rs]
+    read: [docs/adr/005-multi-agent-pack-leases.md]
+    serial: true
+    red: "unskip [S-05]"
+    verify: cargo test --package vrka-swarm --test contract_swarm_leases -- test_s05
+    rules: [RT-03, RT-07, RT-08, RT-17]
+    scenarios: [S-05]
+    effort: standard
+  - id: T-06
+    title: Implement 25 Hz Flow-Matching action chunk producer and boundary validation in vrka_proposer
+    deps: []
+    files: [proposer/src/vrka_proposer/__init__.py, proposer/tests/test_contract_proposer.py]
+    read: [docs/adr/001-flow-matching-chunking.md]
+    serial: false
+    red: "unskip [S-01]"
+    verify: make check-python
+    rules: [RT-08, RT-21]
+    scenarios: [S-01]
+    effort: mechanical
+
+followups: []
