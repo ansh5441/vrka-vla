@@ -6,6 +6,12 @@
 
 #![no_std]
 
+pub mod error;
+pub mod types;
+
+pub use error::VrkaError;
+pub use types::{ActionChunkSlot, FlightRecorderEntry, ShmSlotHeader, SpatialSecurityToken};
+
 /// Hardware cache-line size in bytes across supported target architectures.
 pub const CACHE_LINE_BYTES: usize = 64;
 

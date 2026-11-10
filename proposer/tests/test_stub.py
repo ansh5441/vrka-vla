@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from vrka_proposer import PROPOSER_NOMINAL_HZ
 
+EXPECTED_NOMINAL_HZ: int = 25
+
 
 def test_proposer_nominal_frequency() -> None:
     """Verify nominal proposer frequency constant."""
-    assert PROPOSER_NOMINAL_HZ == 25
+    assert PROPOSER_NOMINAL_HZ == EXPECTED_NOMINAL_HZ
