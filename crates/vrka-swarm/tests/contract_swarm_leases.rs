@@ -6,7 +6,6 @@ use vrka_swarm::{PeerLeaseAggregator, PeerLeaseFrame, DEFAULT_THREAT_POS};
 assert_cache_line_aligned!(PeerLeaseFrame, 128);
 
 #[test]
-#[ignore = "vrka-contract"]
 fn test_s05_swarm_peer_lease_tightening() {
     assert_eq!(core::mem::align_of::<PeerLeaseFrame>(), CACHE_LINE_BYTES);
     assert_eq!(core::mem::size_of::<PeerLeaseFrame>(), 128);

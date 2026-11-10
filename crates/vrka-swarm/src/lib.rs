@@ -96,18 +96,20 @@ impl PeerLeaseAggregator {
         }
     }
 
-    /// Updates active peer obstacle reservation from a validated frame (stub).
+    /// Updates active peer obstacle reservation from a validated frame.
     ///
     /// # Errors
-    /// Returns [`VrkaError::InvalidVelocity`] if frame is invalid, or [`VrkaError::NotImplemented`].
+    /// Returns [`VrkaError::InvalidVelocity`] if frame is invalid.
     pub fn ingest_frame(&mut self, frame: &PeerLeaseFrame) -> Result<(), VrkaError> {
         if !frame.is_valid() {
             return Err(VrkaError::InvalidVelocity);
         }
-        Err(VrkaError::NotImplemented)
+        self.active_peer_pos = frame.peer_pos;
+        self.active_peer_lease_ttl = frame.peer_lease_ttl;
+        Ok(())
     }
 
-    /// Decrements active lease TTL on a 500 Hz tick drop (stub).
+    /// Decrements active lease TTL on a 500 Hz tick drop.
     pub fn step_tick(&mut self) {
         if self.active_peer_lease_ttl > 0 {
             self.active_peer_lease_ttl = self.active_peer_lease_ttl.saturating_sub(1);
