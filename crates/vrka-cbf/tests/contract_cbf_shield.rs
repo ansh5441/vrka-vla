@@ -55,7 +55,6 @@ unsafe impl GlobalAlloc for CountingAllocator {
 static ALLOCATOR: CountingAllocator = CountingAllocator::new();
 
 #[test]
-#[ignore = "vrka-contract"]
 fn test_s03_cbf_braking_distance_shield() {
     assert_eq!(braking_distance(0), 0);
     assert_eq!(braking_distance(1), 1);

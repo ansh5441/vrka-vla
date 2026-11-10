@@ -42,7 +42,7 @@ impl CbfSafetyFilter {
     /// Evaluates forward invariance and projects candidate velocity onto the safe velocity set.
     ///
     /// # Errors
-    /// Returns [`VrkaError::InvalidVelocity`] if inputs are non-finite, or [`VrkaError::NotImplemented`].
+    /// Returns [`VrkaError::InvalidVelocity`] if inputs are non-finite or negative.
     pub fn evaluate_safe_velocity(
         &self,
         robot_pos: f32,
@@ -52,6 +52,23 @@ impl CbfSafetyFilter {
         if !robot_pos.is_finite() || !v_cand.is_finite() || !effective_obstacle_pos.is_finite() {
             return Err(VrkaError::InvalidVelocity);
         }
-        Err(VrkaError::NotImplemented)
+        if v_cand < 0.0 {
+            return Err(VrkaError::InvalidVelocity);
+        }
+
+        let max_vel = if v_cand > 100.0 { 100.0 } else { v_cand };
+        let mut best_safe = 0.0_f32;
+        let mut step = 0.0_f32;
+
+        while step <= max_vel {
+            let stop_dist = (step * (step + 1.0)) * 0.5;
+            let projected_pos = robot_pos + step + stop_dist;
+            if projected_pos <= effective_obstacle_pos {
+                best_safe = step;
+            }
+            step += 1.0;
+        }
+
+        Ok(best_safe)
     }
 }
