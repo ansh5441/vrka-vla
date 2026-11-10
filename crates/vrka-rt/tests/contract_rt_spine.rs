@@ -3,7 +3,6 @@
 use vrka_rt::{CtrlMode, RtSpine};
 
 #[test]
-#[ignore = "vrka-contract"]
 fn test_s04_spine_horizon_ttl_decay() {
     let mut spine = RtSpine::new();
     let now_ns = 1_000_000_000;

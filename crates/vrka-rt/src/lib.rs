@@ -1,6 +1,7 @@
 //! Deterministic 500 Hz real-time control spine state machine and watchdog.
 
 use vrka_abi::{ActionChunkSlot, FlightRecorderEntry, VrkaError};
+use vrka_cbf::CbfSafetyFilter;
 
 /// 500 Hz control spine operational mode.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -51,7 +52,7 @@ impl RtSpineState {
     }
 }
 
-/// 500 Hz real-time daemon supervisor stub.
+/// 500 Hz real-time daemon supervisor.
 pub struct RtSpine {
     state: RtSpineState,
 }
@@ -77,16 +78,78 @@ impl RtSpine {
         &self.state
     }
 
-    /// Steps the 500 Hz control loop for a single tick (stub).
+    fn next_candidate_velocity(&mut self, fresh_read: Option<&ActionChunkSlot>) -> f32 {
+        match fresh_read {
+            Some(chunk) if chunk.is_valid() => {
+                self.state.ctrl_ttl = chunk.chunk_ttl;
+                if chunk.chunk_ttl > 1 {
+                    self.state.mode = CtrlMode::Nominal;
+                    chunk.cmd_vel
+                } else {
+                    self.state.mode = CtrlMode::DecelFallback;
+                    (chunk.cmd_vel - 1.0).max(0.0)
+                }
+            }
+            _ => match self.state.ctrl_ttl.cmp(&2) {
+                core::cmp::Ordering::Greater => {
+                    self.state.ctrl_ttl -= 1;
+                    self.state.mode = CtrlMode::Nominal;
+                    self.state.ctrl_vel
+                }
+                core::cmp::Ordering::Equal => {
+                    self.state.ctrl_ttl = 1;
+                    self.state.mode = CtrlMode::DecelFallback;
+                    (self.state.ctrl_vel - 1.0).max(0.0)
+                }
+                core::cmp::Ordering::Less => {
+                    self.state.ctrl_ttl = 0;
+                    self.state.mode = CtrlMode::StanceLock;
+                    0.0
+                }
+            },
+        }
+    }
+
+    /// Steps the 500 Hz control loop for a single tick.
     ///
     /// # Errors
-    /// Returns [`VrkaError::NotImplemented`].
+    /// Returns [`VrkaError::SafetyViolation`] if state bounds are invalid.
     pub fn step_tick(
         &mut self,
         now_ns: u64,
         fresh_read: Option<&ActionChunkSlot>,
     ) -> Result<FlightRecorderEntry, VrkaError> {
-        let _ = (now_ns, fresh_read);
-        Err(VrkaError::NotImplemented)
+        let v_cand = self.next_candidate_velocity(fresh_read);
+
+        if self.state.mode == CtrlMode::StanceLock {
+            self.state.ctrl_vel = 0.0;
+        } else {
+            let filter = CbfSafetyFilter::new();
+            self.state.ctrl_vel = filter
+                .evaluate_safe_velocity(
+                    self.state.robot_pos,
+                    v_cand,
+                    self.state.effective_obstacle_pos,
+                )
+                .unwrap_or(0.0);
+            self.state.robot_pos += self.state.ctrl_vel;
+        }
+
+        let entry = FlightRecorderEntry {
+            tick: self.state.tick,
+            timestamp_ns: now_ns,
+            shm_seq: fresh_read.map_or(0, |c| c.header.sequence),
+            jitter_ns: 0,
+            ctrl_vel: self.state.ctrl_vel,
+            robot_pos: self.state.robot_pos,
+            ctrl_ttl: self.state.ctrl_ttl,
+            peer_lease_ttl: 0,
+            ctrl_mode: self.state.mode as u8,
+            reserved0: [0u8; 3],
+            reserved1: [0u8; 16],
+        };
+
+        self.state.tick += 1;
+        Ok(entry)
     }
 }
