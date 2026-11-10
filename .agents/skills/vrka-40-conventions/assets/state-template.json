@@ -1,0 +1,21 @@
+{
+  "slug": "{slug}",
+  "phase": "design",
+  "resume_phase": null,
+  "branch": "feat/{slug}",
+  "base_sha": "{merge-base with default branch}",
+  "law1": false,
+  "law1_human_spec": null,
+  "hotpath": false,
+  "abi": false,
+  "isolation": "subagent",
+  "contracts": { "sha": null, "locked": [] },
+  "baseline": { "command": null, "status": null, "known_failures": [] },
+  "tasks": {
+    "T-01": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null }
+  },
+  "escalations": [],
+  "waivers": [],
+  "pr": null,
+  "ci_rounds": 0
+}

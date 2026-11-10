@@ -22,10 +22,16 @@ if ! make -C "${REPO_ROOT}" tla-check >/dev/null 2>&1; then
     echo "[test-verify-specs] FAIL [S-01]: make tla-check failed on vrka_horizon_lease" >&2
     exit 1
 fi
-if ! "${RUNNER}" "vrka_horizon_lease" >/dev/null 2>&1; then
+tlc_out="$("${RUNNER}" "vrka_horizon_lease" 2>&1)" || {
     echo "[test-verify-specs] FAIL [S-01]: verify_specs.sh vrka_horizon_lease failed" >&2
     exit 1
+}
+distinct_states="$(echo "${tlc_out}" | sed -nE 's/.* ([0-9]+) distinct states found.*/\1/p' | tail -n 1)"
+if [[ -z "${distinct_states}" ]] || [[ "${distinct_states}" -le 1 ]]; then
+    echo "[test-verify-specs] FAIL [S-01]: Expected non-trivial state graph (> 1 distinct states), got '${distinct_states:-0}'" >&2
+    exit 1
 fi
+echo "[test-verify-specs] [S-01] Verified ${distinct_states} distinct states with 0 invariant violations."
 
 echo "[test-verify-specs] [S-02] Case (a): Testing unknown <spec_name> fails closed..."
 if TLA_SPECS_DIR="${TMP_DIR}" "${RUNNER}" "nonexistent_spec_xyz" >/dev/null 2>&1; then
