@@ -97,7 +97,6 @@ fn test_s01_shm_slot_alignment_and_zero_alloc() {
 }
 
 #[test]
-#[ignore = "vrka-contract"]
 fn test_s02_seqlock_boundary_rejection() {
     let unaligned = ShmRegionDescriptor { capacity_bytes: 63 };
     assert!(!unaligned.is_aligned(), "Unaligned buffer must be rejected");
