@@ -1,6 +1,6 @@
 {
   "slug": "remaining-phases-roadmap",
-  "phase": "run",
+  "phase": "audit",
   "resume_phase": null,
   "branch": "feat/remaining-phases-roadmap",
   "base_sha": "cfbf04539effe4d31ffacde3b88d16c42f01d0b4",
@@ -57,8 +57,24 @@
       "red": "unskip [S-04]",
       "note": "Implemented 500 Hz spine horizon TTL decay ladder (Nominal -> DecelFallback -> StanceLock) and binary flight recorder entry formatting."
     },
-    "T-05": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
-    "T-06": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null }
+    "T-05": {
+      "status": "done",
+      "attempts": 0,
+      "base": "980ee6c",
+      "commit": "b02cc23",
+      "extra_files": [],
+      "red": "unskip [S-05]",
+      "note": "Implemented multi-agent peer lease obstacle aggregation and TTL decay in vrka-swarm."
+    },
+    "T-06": {
+      "status": "done",
+      "attempts": 0,
+      "base": "b02cc23",
+      "commit": "8ce203f",
+      "extra_files": [],
+      "red": "unskip [S-01]",
+      "note": "Implemented action chunk validation and nominal frequency testing in vrka_proposer."
+    }
   },
   "escalations": [],
   "waivers": [],

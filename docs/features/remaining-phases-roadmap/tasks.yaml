@@ -4,7 +4,7 @@ tier: L
 law1: true
 hotpath: true
 abi: true
-status: Approved
+status: Done
 branch: feat/remaining-phases-roadmap
 adrs:
   - 001-flow-matching-chunking
