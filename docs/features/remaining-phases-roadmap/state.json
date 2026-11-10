@@ -39,8 +39,24 @@
       "red": "unskip [S-02]",
       "note": "Implemented Seqlock boundary rejection for unaligned buffer, odd sequence, and NaN/Inf velocities."
     },
-    "T-03": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
-    "T-04": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-03": {
+      "status": "done",
+      "attempts": 0,
+      "base": "0c1689c",
+      "commit": "e15ed9c",
+      "extra_files": [],
+      "red": "unskip [S-03]",
+      "note": "Implemented discrete CBF braking-distance barrier filter and zero-alloc forward-invariant safe velocity projection."
+    },
+    "T-04": {
+      "status": "done",
+      "attempts": 0,
+      "base": "e15ed9c",
+      "commit": "55ef57a",
+      "extra_files": [],
+      "red": "unskip [S-04]",
+      "note": "Implemented 500 Hz spine horizon TTL decay ladder (Nominal -> DecelFallback -> StanceLock) and binary flight recorder entry formatting."
+    },
     "T-05": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
     "T-06": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null }
   },

@@ -50,7 +50,7 @@ typecheck:
 
 ## Execute all workspace unit and integration tests (including zero-allocation tests)
 test:
-	cargo test --workspace
+	cargo test --workspace -- --test-threads=1
 
 ## Translate PlusCal and execute headless TLC model checking on all specs/*.tla
 verify-specs:
