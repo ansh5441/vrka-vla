@@ -11,7 +11,6 @@ EXPECTED_CHUNK_TTL: int = 3
 EXPECTED_CMD_VEL: float = 1.5
 
 
-@pytest.mark.skip(reason="vrka-contract")
 def test_s01_proposer_chunk_contract() -> None:
     """Verify action chunk dataclass constraints and nominal frequency."""
     assert PROPOSER_NOMINAL_HZ == EXPECTED_PROPOSER_HZ
