@@ -21,8 +21,24 @@
   },
   "baseline": { "command": "make validate", "status": "pass", "known_failures": [] },
   "tasks": {
-    "T-01": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
-    "T-02": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
+    "T-01": {
+      "status": "done",
+      "attempts": 0,
+      "base": "1d07e09",
+      "commit": "391aaef",
+      "extra_files": [],
+      "red": "unskip [S-01]",
+      "note": "Implemented wait-free Seqlock writer and reader with Law 1 Acquire/Release ordering and zero allocations."
+    },
+    "T-02": {
+      "status": "done",
+      "attempts": 0,
+      "base": "391aaef",
+      "commit": "b4a9fd1",
+      "extra_files": [],
+      "red": "unskip [S-02]",
+      "note": "Implemented Seqlock boundary rejection for unaligned buffer, odd sequence, and NaN/Inf velocities."
+    },
     "T-03": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
     "T-04": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
     "T-05": { "status": "pending", "attempts": 0, "base": null, "commit": null, "extra_files": [], "red": null, "note": null },
